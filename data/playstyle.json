@@ -1,0 +1,111 @@
+{
+  "playstyles": [
+    {
+      "label": "AD / Daño Físico",
+      "builds": [
+        {
+          "name": "Crítico Explosivo",
+          "description": "Build centrada en objetos que otorgan daño de ataque y probabilidad de impacto crítico, permitiendo que los ataques básicos inflijan daño multiplicado (usualmente 175% o más)."
+        },
+        {
+          "name": "Letalidad (One-Shot)",
+          "description": "Enfocada en la estadística de Letalidad para ignorar una cantidad fija de la armadura del enemigo, maximizando el daño contra objetivos con poca defensa."
+        },
+        {
+          "name": "On-Hit (Efectos de Impacto)",
+          "description": "Se basa en objetos que aplican daño adicional plano o porcentual con cada ataque básico, optimizando campeones con alta velocidad de ataque."
+        }
+      ]
+    },
+    {
+      "label": "AP / Poder de Habilidad",
+      "builds": [
+        {
+          "name": "Quemadura y Tortura",
+          "description": "Utiliza objetos que aplican efectos de daño mágico prolongado basados en la vida máxima del enemigo, ideal para asedios largos y contra tanques."
+        },
+        {
+          "name": "Burst / Magia Pura",
+          "description": "Prioriza el Poder de Habilidad plano y la Penetración Mágica para maximizar el daño de un solo combo de habilidades en el menor tiempo posible."
+        },
+        {
+          "name": "AP Ofensivo (Nashor)",
+          "description": "Combina Poder de Habilidad con Velocidad de Ataque para que los ataques básicos escalen con magia, permitiendo un daño sostenido híbrido."
+        }
+      ]
+    },
+    {
+      "label": "Tanque / Utilidad",
+      "builds": [
+        {
+          "name": "Muro de Piedra",
+          "description": "Concentración total en Armadura, Resistencia Mágica y Vida plana para absorber la mayor cantidad de daño posible y actuar como primera línea."
+        },
+        {
+          "name": "Tanque de Quemadura (Sunfire)",
+          "description": "Build defensiva que utiliza objetos de aura de fuego para infligir daño mágico constante a los enemigos cercanos por el simple hecho de estar cerca."
+        },
+        {
+          "name": "Support Agresivo",
+          "description": "Se enfoca en objetos de costo reducido que ofrecen utilidad al equipo, como auras de resistencia o reducción de daño para los aliados."
+        }
+      ]
+    },
+    {
+      "label": "Híbrido / Adaptativo",
+      "builds": [
+        {
+          "name": "Híbrido Total (Gunblade Spirit)",
+          "description": "Busca un equilibrio entre Daño de Ataque y Poder de Habilidad para aprovechar escalados duales en el kit de habilidades del campeón."
+        },
+        {
+          "name": "Puño de Brillo (Spellblade)",
+          "description": "Centrada en la pasiva de 'Hoja Encantada', que potencia el siguiente ataque básico tras usar una habilidad, optimizando el daño por ráfagas cortas."
+        }
+      ]
+    },
+    {
+      "label": "Utilidad y Soporte",
+      "builds": [
+        {
+          "name": "Protector Benevolente",
+          "description": "Prioriza estadísticas de Poder de Curación y Escudo, además de regeneración de maná, para maximizar las facultades defensivas hacia los aliados."
+        },
+        {
+          "name": "Maestro del CC (Aceleración)",
+          "description": "Enfocada exclusivamente en Aceleración de Habilidad para reducir los enfriamientos al mínimo y aplicar efectos de control de masas constantemente."
+        }
+      ]
+    },
+    {
+      "label": "Velocidad / Roaming",
+      "builds": [
+        {
+          "name": "Fórmula 1 (Full Speed)",
+          "description": "Se basa en objetos y runas que otorgan Velocidad de Movimiento plana y porcentual, permitiendo rotaciones ultra rápidas por el mapa."
+        },
+        {
+          "name": "Empuje Dividido (Splitpush)",
+          "description": "Especializada en daño a estructuras y velocidad de ataque, diseñada para presionar carriles laterales y derribar torres en solitario."
+        }
+      ]
+    },
+    {
+      "label": "Luchador / Duelista",
+      "builds": [
+        {
+          "name": "Matagigantes",
+          "description": "Utiliza objetos que infligen daño basado en la vida máxima del rival y otorgan penetración porcentual, diseñada para ganar duelos contra tanques."
+        },
+        {
+          "name": "Berserker (Inmortal)",
+          "description": "Combina daño con resistencia y efectos de 'Salvavidas' (escudos al bajar de cierta vida) para sobrevivir en el centro de las peleas de equipo."
+        },
+        {
+          "name": "Drenaje de Vida (Drain Tank)",
+          "description": "Se centra en Omnisucción y Robo de Vida para que la supervivencia del campeón dependa directamente del daño que inflige en combate."
+        }
+      ]
+    }
+  ]
+}

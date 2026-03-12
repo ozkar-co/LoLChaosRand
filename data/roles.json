@@ -1,0 +1,29 @@
+{
+  "roles": [
+    {
+      "id": "top",
+      "name": "Top",
+      "responsibility": "Dominar la línea larga en solitario. Debe gestionar el empuje de oleadas y ser capaz de aguantar presión sin ayuda del Jungla, además de actuar como flanco o frente en peleas."
+    },
+    {
+      "id": "jungle",
+      "name": "Jungla",
+      "responsibility": "Controlar los objetivos neutrales (Dragones/Larvas/Barón). Su labor es presionar las líneas enemigas (gankear) y asegurar que sus aliados tengan ventaja numérica."
+    },
+    {
+      "id": "mid",
+      "name": "Mid",
+      "responsibility": "Controlar el centro del mapa. Al ser la línea más corta, debe rotar rápidamente para apoyar al Jungla o a las líneas laterales y ser una fuente constante de daño o utilidad."
+    },
+    {
+      "id": "bot",
+      "name": "Bot (Carry)",
+      "responsibility": "Ser la fuente de daño sostenido del equipo hacia el final de la partida. Su prioridad absoluta es farmear oro y sobrevivir a toda costa."
+    },
+    {
+      "id": "supp",
+      "name": "Support",
+      "responsibility": "Garantizar la visión en el mapa y proteger al equipo. Debe facilitar las jugadas de sus aliados mediante control de masas, curaciones o iniciaciones."
+    }
+  ]
+}
