@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>LoL Chaos Randomizer</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Space+Grotesk:wght@400;500;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="bg-layer bg-layer-a"></div>
+    <div class="bg-layer bg-layer-b"></div>
+    <div class="noise"></div>
+
+    <main class="app">
+      <header class="hero reveal">
+        <p class="eyebrow">League of Legends</p>
+        <h1>Chaos Randomizer</h1>
+        <p class="subtitle">
+          Ruleta de caos: gira y recibe un campeon, un rol y una build absurda.
+        </p>
+      </header>
+
+      <section class="roulette reveal">
+        <div class="roulette-layout">
+          <div class="image-wrap">
+            <img id="champion-image" alt="Splash del campeon elegido" />
+          </div>
+
+          <div class="result-grid">
+            <article class="card" id="champion-card">
+              <h2>Campeon</h2>
+              <p class="value" id="champion-value">Esperando giro...</p>
+              <p class="meta" id="champion-meta">-</p>
+            </article>
+
+            <article class="card" id="role-card">
+              <h2>Rol</h2>
+              <p class="value" id="role-value">Esperando giro...</p>
+              <p class="meta" id="role-meta">-</p>
+            </article>
+
+            <article class="card" id="build-card">
+              <h2>Build</h2>
+              <p class="value" id="build-value">Esperando giro...</p>
+              <p class="meta" id="build-meta">-</p>
+            </article>
+          </div>
+        </div>
+
+        <div class="controls">
+          <button id="spin-btn" class="spin-btn">Girar Caos</button>
+          <p id="status" class="status">Cargando datos...</p>
+        </div>
+      </section>
+    </main>
+
+    <script src="app.js" type="module"></script>
+  </body>
+</html>
