@@ -102,32 +102,29 @@ function showShareBtn() {
 
 function buildShareUrl() {
   const { champion, role, build } = state.current;
+  const base = `${location.origin}${location.pathname}`;
+
+  if (champion && role && build) {
+    const ci = state.champions.indexOf(champion);
+    const ri = state.roles.indexOf(role);
+    const bi = state.builds.indexOf(build);
+    if (ci >= 0 && ri >= 0 && bi >= 0) {
+      const s =
+        ci.toString(36).padStart(2, "0") +
+        ri.toString(36) +
+        bi.toString(36);
+      return `${base}?s=${s}`;
+    }
+  }
+
   const params = new URLSearchParams();
   if (champion) params.set("champion", champion.id);
   if (role) params.set("role", role.id);
   if (build) params.set("build", build.name);
-  const base = `${location.origin}${location.pathname}`;
   return params.toString() ? `${base}?${params}` : base;
 }
 
-function applyPreload() {
-  const params = new URLSearchParams(location.search);
-  const championId = params.get("champion");
-  const roleId = params.get("role");
-  const buildName = params.get("build");
-
-  if (!championId && !roleId && !buildName) return;
-
-  const champion = championId
-    ? state.champions.find((c) => c.id === championId) ?? null
-    : null;
-  const role = roleId
-    ? state.roles.find((r) => r.id === roleId) ?? null
-    : null;
-  const build = buildName
-    ? state.builds.find((b) => b.name === buildName) ?? null
-    : null;
-
+function _applyState(champion, role, build) {
   if (champion) {
     state.current.champion = champion;
     el.championValue.textContent = champion.name;
@@ -144,11 +141,40 @@ function applyPreload() {
     el.buildValue.textContent = build.name;
     el.buildMeta.textContent = `${build.style} | ${build.description}`;
   }
-
   if (champion || role || build) {
     setStatus("Configuracion caotica lista. Buena suerte.");
     showShareBtn();
   }
+}
+
+function applyPreload() {
+  const params = new URLSearchParams(location.search);
+
+  const shortCode = params.get("s");
+  if (shortCode && shortCode.length === 4) {
+    const ci = parseInt(shortCode.substring(0, 2), 36);
+    const ri = parseInt(shortCode[2], 36);
+    const bi = parseInt(shortCode[3], 36);
+    if (isNaN(ci) || isNaN(ri) || isNaN(bi)) return;
+    _applyState(
+      state.champions[ci] ?? null,
+      state.roles[ri] ?? null,
+      state.builds[bi] ?? null,
+    );
+    return;
+  }
+
+  const championId = params.get("champion");
+  const roleId = params.get("role");
+  const buildName = params.get("build");
+
+  if (!championId && !roleId && !buildName) return;
+
+  _applyState(
+    championId ? (state.champions.find((c) => c.id === championId) ?? null) : null,
+    roleId ? (state.roles.find((r) => r.id === roleId) ?? null) : null,
+    buildName ? (state.builds.find((b) => b.name === buildName) ?? null) : null,
+  );
 }
 
 async function spinAll() {
