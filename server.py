@@ -18,8 +18,11 @@ BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
 # Data loaded at startup
 _CHAMPION_NAMES: dict[str, str] = {}
+_CHAMPION_IDS: list[str] = []
 _ROLE_NAMES: dict[str, str] = {}
+_ROLE_IDS: list[str] = []
 _BUILD_NAMES: set[str] = set()
+_BUILD_LIST: list[str] = []
 _INDEX_HTML: str = ""
 _OG_BLOCK_RE = re.compile(r"<!-- og:meta-start -->.*?<!-- og:meta-end -->", re.DOTALL)
 
@@ -31,12 +34,14 @@ def _load_data() -> None:
         champion_json = json.load(f)
     for champ in champion_json["data"].values():
         _CHAMPION_NAMES[champ["id"]] = champ["name"]
+        _CHAMPION_IDS.append(champ["id"])
 
     role_file = os.path.join(BASE_DIR, "data", "roles.json")
     with open(role_file, encoding="utf-8") as f:
         role_json = json.load(f)
     for role in role_json["roles"]:
         _ROLE_NAMES[role["id"]] = role["name"]
+        _ROLE_IDS.append(role["id"])
 
     playstyle_file = os.path.join(BASE_DIR, "data", "playstyle.json")
     with open(playstyle_file, encoding="utf-8") as f:
@@ -44,6 +49,7 @@ def _load_data() -> None:
     for style in playstyle_json["playstyles"]:
         for build in style["builds"]:
             _BUILD_NAMES.add(build["name"])
+            _BUILD_LIST.append(build["name"])
 
     global _INDEX_HTML
     index_path = os.path.join(BASE_DIR, "index.html")
@@ -62,6 +68,26 @@ def _get_base_url(handler: "Handler") -> str:
     else:
         scheme = "https"
     return f"{scheme}://{host}"
+
+
+def _decode_short(s: str) -> tuple[str, str, str]:
+    """Decode a 4-char base36 short share code into (champion_id, role_id, build_name).
+
+    Encoding: CC R B where CC = champion index (2 base36 chars),
+    R = role index (1 base36 char), B = build index (1 base36 char).
+    """
+    if len(s) != 4:
+        return ("", "", "")
+    try:
+        ci = int(s[0:2], 36)
+        ri = int(s[2], 36)
+        bi = int(s[3], 36)
+    except ValueError:
+        return ("", "", "")
+    champion_id = _CHAMPION_IDS[ci] if ci < len(_CHAMPION_IDS) else ""
+    role_id = _ROLE_IDS[ri] if ri < len(_ROLE_IDS) else ""
+    build_name = _BUILD_LIST[bi] if bi < len(_BUILD_LIST) else ""
+    return (champion_id, role_id, build_name)
 
 
 def _build_og_tags(base_url: str, current_url: str, champion_id: str, role_id: str, build_name: str) -> str:
@@ -130,9 +156,13 @@ class Handler(SimpleHTTPRequestHandler):
 
         if path in ("/", "/index.html"):
             params = parse_qs(parsed.query)
-            champion_id = params.get("champion", [""])[0]
-            role_id = params.get("role", [""])[0]
-            build_name = params.get("build", [""])[0]
+            short_code = params.get("s", [""])[0]
+            if short_code:
+                champion_id, role_id, build_name = _decode_short(short_code)
+            else:
+                champion_id = params.get("champion", [""])[0]
+                role_id = params.get("role", [""])[0]
+                build_name = params.get("build", [""])[0]
 
             base_url = _get_base_url(self)
             current_url = f"{base_url}{self.path}"
