@@ -1,3 +1,3 @@
 #!/bin/bash
-python3 -m http.server 3003
+python3 server.py
 

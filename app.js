@@ -1,5 +1,6 @@
 const el = {
   spinBtn: document.getElementById("spin-btn"),
+  shareBtn: document.getElementById("share-btn"),
   status: document.getElementById("status"),
   championValue: document.getElementById("champion-value"),
   championMeta: document.getElementById("champion-meta"),
@@ -18,6 +19,7 @@ const state = {
   roles: [],
   builds: [],
   spinning: false,
+  current: { champion: null, role: null, build: null },
 };
 
 function sampleRandom(items) {
@@ -94,11 +96,67 @@ async function updateChampionImage(championId) {
   el.championImage.style.display = "none";
 }
 
+function showShareBtn() {
+  el.shareBtn.style.display = "";
+}
+
+function buildShareUrl() {
+  const { champion, role, build } = state.current;
+  const params = new URLSearchParams();
+  if (champion) params.set("champion", champion.id);
+  if (role) params.set("role", role.id);
+  if (build) params.set("build", build.name);
+  const base = `${location.origin}${location.pathname}`;
+  return params.toString() ? `${base}?${params}` : base;
+}
+
+function applyPreload() {
+  const params = new URLSearchParams(location.search);
+  const championId = params.get("champion");
+  const roleId = params.get("role");
+  const buildName = params.get("build");
+
+  if (!championId && !roleId && !buildName) return;
+
+  const champion = championId
+    ? state.champions.find((c) => c.id === championId) ?? null
+    : null;
+  const role = roleId
+    ? state.roles.find((r) => r.id === roleId) ?? null
+    : null;
+  const build = buildName
+    ? state.builds.find((b) => b.name === buildName) ?? null
+    : null;
+
+  if (champion) {
+    state.current.champion = champion;
+    el.championValue.textContent = champion.name;
+    el.championMeta.textContent = champion.title;
+    updateChampionImage(champion.id);
+  }
+  if (role) {
+    state.current.role = role;
+    el.roleValue.textContent = role.name;
+    el.roleMeta.textContent = role.responsibility;
+  }
+  if (build) {
+    state.current.build = build;
+    el.buildValue.textContent = build.name;
+    el.buildMeta.textContent = `${build.style} | ${build.description}`;
+  }
+
+  if (champion || role || build) {
+    setStatus("Configuracion caotica lista. Buena suerte.");
+    showShareBtn();
+  }
+}
+
 async function spinAll() {
   if (state.spinning) return;
 
   state.spinning = true;
   el.spinBtn.disabled = true;
+  el.shareBtn.style.display = "none";
 
   try {
     setStatus("Girando campeon...");
@@ -117,11 +175,12 @@ async function spinAll() {
       },
     });
 
+    state.current.champion = champion;
     await updateChampionImage(champion.id);
     await sleep(250);
 
     setStatus("Girando rol...");
-    await rouletteSpin({
+    const role = await rouletteSpin({
       card: el.roleCard,
       list: state.roles,
       durationMs: 1700,
@@ -136,10 +195,11 @@ async function spinAll() {
       },
     });
 
+    state.current.role = role;
     await sleep(220);
 
     setStatus("Girando build...");
-    await rouletteSpin({
+    const build = await rouletteSpin({
       card: el.buildCard,
       list: state.builds,
       durationMs: 2200,
@@ -154,13 +214,25 @@ async function spinAll() {
       },
     });
 
+    state.current.build = build;
     setStatus("Configuracion caotica lista. Buena suerte.");
+    showShareBtn();
   } catch (error) {
     console.error(error);
     setStatus("Error durante la ruleta. Revisa la consola.");
   } finally {
     state.spinning = false;
     el.spinBtn.disabled = false;
+  }
+}
+
+async function handleShare() {
+  const url = buildShareUrl();
+  try {
+    await navigator.clipboard.writeText(url);
+    setStatus("Enlace copiado al portapapeles.");
+  } catch {
+    prompt("Copia este enlace:", url);
   }
 }
 
@@ -185,7 +257,11 @@ async function initialize() {
       throw new Error("Datos incompletos para inicializar la ruleta");
     }
 
-    setStatus("Listo para girar.");
+    applyPreload();
+
+    if (!state.current.champion && !state.current.role && !state.current.build) {
+      setStatus("Listo para girar.");
+    }
     el.spinBtn.disabled = false;
   } catch (error) {
     console.error(error);
@@ -195,5 +271,7 @@ async function initialize() {
 }
 
 el.spinBtn.addEventListener("click", spinAll);
+el.shareBtn.addEventListener("click", handleShare);
 el.spinBtn.disabled = true;
 initialize();
+
