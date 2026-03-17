@@ -228,6 +228,22 @@ async function spinAll() {
 
 async function handleShare() {
   const url = buildShareUrl();
+  const { champion, role, build } = state.current;
+  const title = "LoL Chaos Randomizer";
+  const text =
+    champion && role && build
+      ? `¡Me salió ${champion.name} de ${role.name} con build ${build.name}! ¿Te atreves?`
+      : "¡Gira la ruleta del caos en League of Legends!";
+
+  if (navigator.share) {
+    try {
+      await navigator.share({ title, text, url });
+      return;
+    } catch (err) {
+      if (err.name === "AbortError") return;
+    }
+  }
+
   try {
     await navigator.clipboard.writeText(url);
     setStatus("Enlace copiado al portapapeles.");
